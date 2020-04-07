@@ -25,6 +25,7 @@ public class OrderService {
 	@Autowired
 	ModelMapper modelMapper;
 
+	@Transactional
 	public ResponseEntity<OrderDTO> getOrder(Long id) {
 		OrderDTO orderDTO = null;
 		Optional<Order> optional = orderRepo.findById(id);
@@ -34,7 +35,8 @@ public class OrderService {
 		return new ResponseEntity<>(orderDTO, HttpStatus.OK);
 	}
 
-	
+
+	@Transactional
 	public ResponseEntity<OrderDTO> save(OrderDTO orderDTO) {
 		OrderDTO returnODTO = null;
 		Order order = modelMapper.map(orderDTO, Order.class);
@@ -45,12 +47,14 @@ public class OrderService {
 		return new ResponseEntity<>(returnODTO, HttpStatus.CREATED);
 	}
 
+	@Transactional
 	public ResponseEntity<List<OrderDTO>> getOrders() {
 		List<Order> findAll = orderRepo.findAll();
 		List<OrderDTO> orderDTOs = modelMapper.map(findAll, new TypeToken<List<OrderDTO>>() {}.getType());
 		return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
 	}
 
+	@Transactional
 	public ResponseEntity<OrderDTO> updateOrderPaymentStatus(Long id, String paymentStatus) {
 		OrderStatus orderStatus = OrderStatus.valueOf(paymentStatus);
 		Optional<Order> optional = orderRepo.findById(id);
